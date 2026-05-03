@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Internal Tool Hub",
-  description: "Centralized internal tools directory with guides and repository links.",
+  title: "MindX Internal Tool Hub",
+  description: "Repository management and dynamic landing pages for internal applications.",
 };
 
 export default function RootLayout({

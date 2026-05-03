@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MindX Internal Tool Hub
 
-## Getting Started
+Next.js (App Router) web hub for managing internal tool repositories and rendering dynamic app landing pages.
 
-First, run the development server:
+## Architecture Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Frontend:** Next.js App Router + Tailwind CSS + shadcn/ui components.
+- **Data layer (current):** in-memory mock store (`src/lib/repo-store.ts`) for rapid CRUD development.
+- **Data layer (planned):** Prisma + PostgreSQL (Supabase) schema included at `prisma/schema.prisma`.
+- **API style:** Route Handlers in `app/api` for repository CRUD.
+- **Dynamic pages:** `/apps/[slug]` renders a dedicated landing page per repository.
+- **Auth:** none (public access).
+
+## App & API Routes
+
+- `GET /apps` -> repository directory + Add Repo form.
+- `GET /apps/[slug]` -> dynamic landing page for a selected app.
+- `GET /api/repos` -> list repositories.
+- `POST /api/repos` -> create repository.
+- `GET /api/repos/[id]` -> get repository by id.
+- `PATCH /api/repos/[id]` -> update repository.
+- `DELETE /api/repos/[id]` -> delete repository.
+
+## Folder Structure
+
+```text
+src/
+  app/
+    api/
+      repos/
+        route.ts
+        [id]/
+          route.ts
+    apps/
+      page.tsx
+      [slug]/
+        page.tsx
+    page.tsx
+    layout.tsx
+    globals.css
+  components/
+    apps/
+      add-repo-form.tsx
+      delete-repo-button.tsx
+    ui/
+      button.tsx
+      card.tsx
+      badge.tsx
+  lib/
+    repo-types.ts
+    repo-store.ts
+prisma/
+  schema.prisma
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open `http://localhost:3000` (auto-redirects to `/apps`).
 
-## Learn More
+## CRUD Data Flow
 
-To learn more about Next.js, take a look at the following resources:
+1. User submits **Add Repo** form on `/apps`.
+2. Client component sends `POST /api/repos` with GitHub URL + metadata.
+3. Route Handler validates payload and writes into mock data store.
+4. UI refreshes and navigates to `/apps/[slug]`.
+5. Dynamic page reads the repo entity by slug and displays:
+   - Hero/metadata
+   - README rendering placeholder
+   - Usage guide placeholder
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Prisma Migration Path (Optional)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Install Prisma dependencies.
+2. Set `DATABASE_URL` in `.env`.
+3. Run migrations against Supabase Postgres.
+4. Replace `repo-store.ts` functions with Prisma client calls in route handlers.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
