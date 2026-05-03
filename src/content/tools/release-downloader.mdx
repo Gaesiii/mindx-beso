@@ -1,0 +1,26 @@
+export const metadata = {
+  owner: "Release Engineering",
+  updatedAt: "2026-05-03",
+};
+
+## Overview
+
+Release Downloader helps users quickly retrieve approved release artifacts from internal repositories.
+
+## Typical Flow
+
+1. Search by repository and release tag.
+2. Confirm artifact checksum and release notes.
+3. Download package for testing or deployment.
+
+## Supported Assets
+
+- `.zip` and `.tar.gz` bundles
+- Platform-specific installers
+- Release metadata and changelog references
+
+## Security Guidance
+
+- Only download artifacts from trusted organization repositories.
+- Verify checksums before distributing packages internally.
+- Do not mirror artifacts to unapproved external locations.
