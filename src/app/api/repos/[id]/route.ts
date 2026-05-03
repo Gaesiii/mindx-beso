@@ -8,7 +8,7 @@ type RouteProps = {
 
 export async function GET(_: Request, { params }: RouteProps) {
   const { id } = await params;
-  const repo = getRepoById(id);
+  const repo = await getRepoById(id);
   if (!repo) {
     return NextResponse.json({ error: "repo not found" }, { status: 404 });
   }
@@ -20,7 +20,7 @@ export async function PATCH(request: Request, { params }: RouteProps) {
 
   try {
     const body = (await request.json()) as AppRepoUpdateInput;
-    const repo = updateRepo(id, body);
+    const repo = await updateRepo(id, body);
     if (!repo) {
       return NextResponse.json({ error: "repo not found" }, { status: 404 });
     }
@@ -33,7 +33,7 @@ export async function PATCH(request: Request, { params }: RouteProps) {
 
 export async function DELETE(_: Request, { params }: RouteProps) {
   const { id } = await params;
-  const deleted = deleteRepo(id);
+  const deleted = await deleteRepo(id);
   if (!deleted) {
     return NextResponse.json({ error: "repo not found" }, { status: 404 });
   }

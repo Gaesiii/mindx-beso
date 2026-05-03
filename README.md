@@ -5,15 +5,16 @@ Next.js (App Router) web hub for managing internal tool repositories and renderi
 ## Architecture Overview
 
 - **Frontend:** Next.js App Router + Tailwind CSS + shadcn/ui components.
-- **Data layer (current):** in-memory mock store (`src/lib/repo-store.ts`) for rapid CRUD development.
-- **Data layer (planned):** Prisma + PostgreSQL (Supabase) schema included at `prisma/schema.prisma`.
+- **Data layer (current):** PostgreSQL (Supabase) via `pg` in `src/lib/repo-store.ts`.
+- **Data layer (optional path):** Prisma schema included at `prisma/schema.prisma`.
 - **API style:** Route Handlers in `app/api` for repository CRUD.
 - **Dynamic pages:** `/apps/[slug]` renders a dedicated landing page per repository.
 - **Auth:** none (public access).
 
 ## App & API Routes
 
-- `GET /apps` -> repository directory + Add Repo form.
+- `GET /apps` -> repository directory.
+- `GET /apps/new` -> Add Repo form page.
 - `GET /apps/[slug]` -> dynamic landing page for a selected app.
 - `GET /api/repos` -> list repositories.
 - `POST /api/repos` -> create repository.
@@ -33,6 +34,8 @@ src/
           route.ts
     apps/
       page.tsx
+      new/
+        page.tsx
       [slug]/
         page.tsx
     page.tsx
@@ -42,11 +45,15 @@ src/
     apps/
       add-repo-form.tsx
       delete-repo-button.tsx
+      repos-grid.tsx
+      app-landing.tsx
+      mindx-brand.tsx
     ui/
       button.tsx
       card.tsx
       badge.tsx
   lib/
+    repo-db.ts
     repo-types.ts
     repo-store.ts
 prisma/
@@ -62,11 +69,17 @@ npm run dev
 
 Open `http://localhost:3000` (auto-redirects to `/apps`).
 
+Create `.env.local` and set:
+
+```env
+DATABASE_URL=postgresql://...
+```
+
 ## CRUD Data Flow
 
-1. User submits **Add Repo** form on `/apps`.
+1. User submits **Add Repo** form on `/apps/new`.
 2. Client component sends `POST /api/repos` with GitHub URL + metadata.
-3. Route Handler validates payload and writes into mock data store.
+3. Route Handler validates payload and writes into PostgreSQL.
 4. UI refreshes and navigates to `/apps/[slug]`.
 5. Dynamic page reads the repo entity by slug and displays:
    - Hero/metadata
@@ -79,4 +92,3 @@ Open `http://localhost:3000` (auto-redirects to `/apps`).
 2. Set `DATABASE_URL` in `.env`.
 3. Run migrations against Supabase Postgres.
 4. Replace `repo-store.ts` functions with Prisma client calls in route handlers.
-

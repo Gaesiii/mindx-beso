@@ -7,17 +7,17 @@ export async function GET(request: Request) {
   const slug = url.searchParams.get("slug");
 
   if (slug) {
-    const repo = getRepoBySlug(slug);
+    const repo = await getRepoBySlug(slug);
     return NextResponse.json({ data: repo ?? null });
   }
 
-  return NextResponse.json({ data: listRepos() });
+  return NextResponse.json({ data: await listRepos() });
 }
 
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as AppRepoCreateInput;
-    const repo = createRepo(body);
+    const repo = await createRepo(body);
     return NextResponse.json({ data: repo }, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "failed to create repo";
