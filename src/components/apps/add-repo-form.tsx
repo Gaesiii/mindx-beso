@@ -71,85 +71,88 @@ export function AddRepoForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4 rounded-2xl border border-red-100 bg-white p-5 shadow-sm">
-      <h2 className="text-lg font-semibold text-red-700">Add Repo</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="grid gap-5 rounded-2xl border border-red-200 bg-white p-6 shadow-sm"
+    >
+      <h2 className="text-2xl font-bold text-red-700">Add Repo</h2>
 
-      <label className="grid gap-1.5 text-sm">
-        <span className="font-medium text-slate-700">App Name</span>
+      <label className="grid gap-1.5 text-base">
+        <span className="font-semibold text-slate-700">App Name</span>
         <input
           required
           value={form.name}
           onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
-          className="h-10 rounded-lg border border-slate-200 px-3 outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
+          className="h-11 rounded-lg border border-slate-200 px-3 text-base outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
           placeholder="Release Manager"
         />
       </label>
 
-      <label className="grid gap-1.5 text-sm">
-        <span className="font-medium text-slate-700">GitHub Repository URL</span>
+      <label className="grid gap-1.5 text-base">
+        <span className="font-semibold text-slate-700">GitHub Repository URL</span>
         <input
           required
           type="url"
           value={form.githubUrl}
           onChange={(event) => setForm((prev) => ({ ...prev, githubUrl: event.target.value }))}
-          className="h-10 rounded-lg border border-slate-200 px-3 outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
+          className="h-11 rounded-lg border border-slate-200 px-3 text-base outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
           placeholder="https://github.com/your-org/release-manager"
         />
       </label>
 
-      <label className="grid gap-1.5 text-sm">
-        <span className="font-medium text-slate-700">Short Description</span>
+      <label className="grid gap-1.5 text-base">
+        <span className="font-semibold text-slate-700">Short Description</span>
         <input
           required
           value={form.shortDescription}
           onChange={(event) =>
             setForm((prev) => ({ ...prev, shortDescription: event.target.value }))
           }
-          className="h-10 rounded-lg border border-slate-200 px-3 outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
+          className="h-11 rounded-lg border border-slate-200 px-3 text-base outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
           placeholder="Centralized release package orchestration."
         />
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="grid gap-1.5 text-sm">
-          <span className="font-medium text-slate-700">Category</span>
+        <label className="grid gap-1.5 text-base">
+          <span className="font-semibold text-slate-700">Category</span>
           <input
             required
             value={form.category}
             onChange={(event) => setForm((prev) => ({ ...prev, category: event.target.value }))}
-            className="h-10 rounded-lg border border-slate-200 px-3 outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
+            className="h-11 rounded-lg border border-slate-200 px-3 text-base outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
             placeholder="Operations"
           />
         </label>
 
-        <label className="grid gap-1.5 text-sm">
-          <span className="font-medium text-slate-700">Tags (comma separated)</span>
+        <label className="grid gap-1.5 text-base">
+          <span className="font-semibold text-slate-700">Tags (comma separated)</span>
           <input
             value={form.tags}
             onChange={(event) => setForm((prev) => ({ ...prev, tags: event.target.value }))}
-            className="h-10 rounded-lg border border-slate-200 px-3 outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
+            className="h-11 rounded-lg border border-slate-200 px-3 text-base outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
             placeholder="release, tooling"
           />
         </label>
       </div>
 
-      <label className="grid gap-1.5 text-sm">
-        <span className="font-medium text-slate-700">Usage Guide Seed</span>
+      <label className="grid gap-1.5 text-base">
+        <span className="font-semibold text-slate-700">Usage Guide Seed</span>
         <textarea
-          rows={4}
+          rows={5}
           value={form.usageGuide}
           onChange={(event) => setForm((prev) => ({ ...prev, usageGuide: event.target.value }))}
-          className="rounded-lg border border-slate-200 px-3 py-2 outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
+          className="rounded-lg border border-slate-200 px-3 py-2 text-base outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-200"
           placeholder="Short onboarding notes before README integration."
         />
       </label>
 
-      <div className="flex items-center gap-3">
-        <Button type="submit" disabled={submitting}>
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="submit" size="lg" disabled={submitting}>
           {submitting ? "Saving..." : "Save Repository"}
         </Button>
-        {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
-        {error ? <p className="text-sm text-red-700">{error}</p> : null}
+        {message ? <p className="text-base text-emerald-700">{message}</p> : null}
+        {error ? <p className="text-base text-red-700">{error}</p> : null}
       </div>
     </form>
   );

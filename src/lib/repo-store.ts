@@ -2,34 +2,7 @@ import type { AppRepo, AppRepoCreateInput, AppRepoUpdateInput } from "@/lib/repo
 
 const githubRepoRegex = /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/?$/i;
 
-const initialRepos: AppRepo[] = [
-  {
-    id: "app_001",
-    slug: "build-monitor",
-    name: "Build Monitor",
-    githubUrl: "https://github.com/your-org/build-monitor",
-    shortDescription: "Track CI build health across internal repositories.",
-    category: "Engineering",
-    tags: ["ci", "devops", "monitoring"],
-    readmeSource: "github",
-    usageGuide: "Follow the workspace onboarding steps in your team playbook.",
-    createdAt: "2026-05-03T00:00:00.000Z",
-    updatedAt: "2026-05-03T00:00:00.000Z",
-  },
-  {
-    id: "app_002",
-    slug: "release-downloader",
-    name: "Release Downloader",
-    githubUrl: "https://github.com/your-org/release-downloader",
-    shortDescription: "Download approved release artifacts for deployment.",
-    category: "Operations",
-    tags: ["release", "artifacts"],
-    readmeSource: "github",
-    usageGuide: "Use release tags and verify checksums before sharing binaries.",
-    createdAt: "2026-05-03T00:00:00.000Z",
-    updatedAt: "2026-05-03T00:00:00.000Z",
-  },
-];
+const initialRepos: AppRepo[] = [];
 
 let repos = [...initialRepos];
 
