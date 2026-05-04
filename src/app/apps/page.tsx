@@ -100,8 +100,7 @@ export default function AppsDirectoryPage() {
             </h2>
           </div>
           <p className="max-w-lg text-base font-medium leading-7 text-[#58595B]">
-            Bấm trực tiếp vào card để mở landing page của từng app. Link GitHub vẫn mở repository
-            riêng ở tab mới.
+            Repository đã kết nối Supabase, đồng bộ metadata và có landing page riêng cho từng app.
           </p>
         </div>
 

@@ -204,8 +204,7 @@ export function ReposGrid() {
               </div>
             </CardContent>
 
-            <CardFooter className="mt-auto flex items-center justify-between gap-3 border-t border-[#E31F26]/10 bg-[#fffaf7] p-5">
-              <p className="text-sm font-extrabold text-[#E31F26]">Bấm vào card để mở landing</p>
+            <CardFooter className="mt-auto flex items-center justify-end gap-3 border-t border-[#E31F26]/10 bg-[#fffaf7] p-5">
               <DeleteRepoButton
                 id={repo.id}
                 onDeleted={() => setRepos((prev) => prev.filter((item) => item.id !== repo.id))}
