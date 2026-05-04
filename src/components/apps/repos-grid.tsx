@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
-  ArrowUpRight,
   ExternalLink,
   GitBranch,
   LoaderCircle,
@@ -13,7 +12,6 @@ import {
 import type { AppRepo } from "@/lib/repo-types";
 import { DeleteRepoButton } from "@/components/apps/delete-repo-button";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -34,7 +32,12 @@ function isFeaturedRepo(repo: AppRepo) {
   return searchable.includes("mindx-auto-grader") || searchable.includes("auto-grader");
 }
 
+function isInteractiveElement(target: EventTarget | null) {
+  return target instanceof HTMLElement && Boolean(target.closest("a,button"));
+}
+
 export function ReposGrid() {
+  const router = useRouter();
   const [repos, setRepos] = useState<AppRepo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -127,7 +130,21 @@ export function ReposGrid() {
         return (
           <Card
             key={repo.id}
-            className={`relative min-h-[360px] rounded-[30px] border bg-white py-0 shadow-[0_24px_70px_rgba(44,43,43,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(227,31,38,0.16)] ${
+            role="link"
+            tabIndex={0}
+            aria-label={`Mở landing page ${repo.name}`}
+            onClick={(event) => {
+              if (isInteractiveElement(event.target)) return;
+              router.push(`/apps/${repo.slug}`);
+            }}
+            onKeyDown={(event) => {
+              if (isInteractiveElement(event.target)) return;
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                router.push(`/apps/${repo.slug}`);
+              }
+            }}
+            className={`relative min-h-[360px] cursor-pointer rounded-[30px] border bg-white py-0 shadow-[0_24px_70px_rgba(44,43,43,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(227,31,38,0.16)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#E31F26]/25 ${
               featured ? "border-[#E31F26]/35 ring-4 ring-[#E31F26]/10" : "border-[#E31F26]/10"
             }`}
           >
@@ -162,6 +179,7 @@ export function ReposGrid() {
                 href={repo.githubUrl}
                 target="_blank"
                 rel="noreferrer"
+                onClick={(event) => event.stopPropagation()}
                 className="flex items-center gap-3 rounded-2xl border border-[#2C2B2B]/10 bg-[#fff9f5] px-4 py-3 text-sm font-bold text-[#2C2B2B] transition hover:border-[#E31F26]/30 hover:bg-[#fff0e8]"
               >
                 <GitBranch className="size-4 shrink-0 text-[#E31F26]" />
@@ -187,17 +205,7 @@ export function ReposGrid() {
             </CardContent>
 
             <CardFooter className="mt-auto flex items-center justify-between gap-3 border-t border-[#E31F26]/10 bg-[#fffaf7] p-5">
-              <Link
-                href={`/apps/${repo.slug}`}
-                className={buttonVariants({
-                  size: "lg",
-                  className:
-                    "h-10 rounded-full bg-[#E31F26] px-5 text-sm font-extrabold text-white shadow-[0_12px_30px_rgba(227,31,38,0.28)] hover:bg-[#c8181f]",
-                })}
-              >
-                Mở landing
-                <ArrowUpRight className="size-4" />
-              </Link>
+              <p className="text-sm font-extrabold text-[#E31F26]">Bấm vào card để mở landing</p>
               <DeleteRepoButton
                 id={repo.id}
                 onDeleted={() => setRepos((prev) => prev.filter((item) => item.id !== repo.id))}

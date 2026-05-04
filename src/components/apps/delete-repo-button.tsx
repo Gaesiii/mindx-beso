@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 
 type DeleteRepoButtonProps = {
   id: string;
@@ -11,7 +11,8 @@ export function DeleteRepoButton({ id, onDeleted }: DeleteRepoButtonProps) {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleDelete() {
+  async function handleDelete(event: MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
     const confirmed = window.confirm("Xóa app này khỏi danh sách?");
     if (!confirmed) return;
 
@@ -29,7 +30,7 @@ export function DeleteRepoButton({ id, onDeleted }: DeleteRepoButtonProps) {
   }
 
   return (
-    <div className="flex flex-col items-end gap-1">
+    <div className="flex flex-col items-end gap-1" onClick={(event) => event.stopPropagation()}>
       <button
         type="button"
         disabled={deleting}
