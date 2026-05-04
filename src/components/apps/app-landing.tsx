@@ -4,17 +4,28 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
+  BellRing,
   BookOpen,
   Bot,
+  CalendarCheck,
+  ChartNoAxesColumnIncreasing,
   CheckCircle2,
   ClipboardCheck,
   Cloud,
+  DatabaseZap,
+  Gauge,
   GraduationCap,
   Keyboard,
+  MessageSquareText,
   MonitorCheck,
+  Route,
+  ServerCog,
   ShieldCheck,
+  Smartphone,
   Sparkles,
   Users,
+  Wallet,
+  WifiOff,
   type LucideIcon,
 } from "lucide-react";
 import { MindxBrand } from "@/components/apps/mindx-brand";
@@ -95,9 +106,79 @@ const autoGraderAudiences = [
   "Team vận hành trial class cần gom thông tin học viên, trạng thái và feedback về một flow.",
 ];
 
+const smoothBridgeFeatures: Feature[] = [
+  {
+    title: "Mobile dashboard cho lớp đang chạy",
+    description:
+      "Flutter app gom lớp học, lịch gần tới và trạng thái vận hành vào một giao diện nhẹ hơn LMS web.",
+    icon: Smartphone,
+    accent: "from-[#E31F26] to-[#ff7043]",
+  },
+  {
+    title: "Backend bridge cho LMS GraphQL",
+    description:
+      "Node.js + Express đứng giữa mobile và LMS, reshape payload nặng thành JSON gọn, ổn định hơn cho app.",
+    icon: ServerCog,
+    accent: "from-slate-900 to-[#E31F26]",
+  },
+  {
+    title: "Điểm danh và comment học viên",
+    description:
+      "API hỗ trợ đọc/sửa comment theo slot, lưu attendance và giữ luồng review trước khi submit.",
+    icon: MessageSquareText,
+    accent: "from-amber-500 to-orange-600",
+  },
+  {
+    title: "Nhắc việc vận hành",
+    description:
+      "Push notifier theo thiết bị cho slot sắp mở, lớp còn thiếu comment và các tác vụ cần xử lý đúng giờ.",
+    icon: BellRing,
+    accent: "from-rose-500 to-red-700",
+  },
+  {
+    title: "Payroll theo tháng",
+    description:
+      "Mobile đọc bảng lương tháng qua backend, có cache để thao tác mượt hơn trong bối cảnh mạng không ổn định.",
+    icon: Wallet,
+    accent: "from-emerald-500 to-teal-700",
+  },
+  {
+    title: "Cache và prewarm hằng ngày",
+    description:
+      "Dashboard overview có cache MongoDB và cron prewarm lúc nửa đêm Việt Nam để giảm thời gian chờ đầu ngày.",
+    icon: DatabaseZap,
+    accent: "from-sky-500 to-blue-700",
+  },
+];
+
+const smoothBridgeApiGroups = [
+  {
+    title: "Mobile auth",
+    description: "Firebase REST verifyPassword, Bearer token, secure storage và session refresh.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Class operations",
+    description: "Classes, dashboard overview, reminders, attendance slot và comment context.",
+    icon: CalendarCheck,
+  },
+  {
+    title: "Ops backend",
+    description: "Device registration, notifier tick, public config, payroll và admin endpoints.",
+    icon: Route,
+  },
+];
+
+const smoothBridgeStack = ["Flutter", "Node.js 20", "Express", "MongoDB", "Firebase", "Vercel"];
+
 function isAutoGraderRepo(repo: AppRepo): boolean {
   const source = `${repo.slug} ${repo.githubUrl} ${repo.name}`.toLowerCase();
   return source.includes("mindx-auto-grader-extension") || source.includes("auto-grader");
+}
+
+function isSmoothBridgeRepo(repo: AppRepo): boolean {
+  const source = `${repo.slug} ${repo.githubUrl} ${repo.name}`.toLowerCase();
+  return source.includes("lms-smooth-bridge") || source.includes("lms-mobile-app");
 }
 
 export function AppLanding({ slug }: AppLandingProps) {
@@ -151,6 +232,10 @@ export function AppLanding({ slug }: AppLandingProps) {
 
   if (isAutoGraderRepo(appRepo)) {
     return <AutoGraderLanding repo={appRepo} />;
+  }
+
+  if (isSmoothBridgeRepo(appRepo)) {
+    return <SmoothBridgeLanding repo={appRepo} />;
   }
 
   return <GenericLanding repo={appRepo} />;
@@ -419,6 +504,290 @@ function AutoGraderLanding({ repo }: { repo: AppRepo }) {
         </section>
       </div>
     </main>
+  );
+}
+
+function SmoothBridgeLanding({ repo }: { repo: AppRepo }) {
+  const updatedAt = new Date(repo.updatedAt).toLocaleDateString("vi-VN", { dateStyle: "medium" });
+
+  return (
+    <main className="min-h-svh overflow-hidden bg-[#fff8f2] text-[#2C2B2B]">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_14%_12%,rgba(227,31,38,0.18),transparent_26%),radial-gradient(circle_at_82%_14%,rgba(255,178,136,0.32),transparent_24%),linear-gradient(135deg,#fff8f2_0%,#ffffff_52%,#fff0e8_100%)]" />
+      <div className="pointer-events-none fixed inset-0 opacity-[0.18] [background-image:linear-gradient(rgba(227,31,38,.18)_1px,transparent_1px),linear-gradient(90deg,rgba(227,31,38,.14)_1px,transparent_1px)] [background-size:46px_46px]" />
+
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+        <nav className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-white/80 bg-white/90 px-4 py-3 shadow-xl shadow-red-950/10 backdrop-blur-xl">
+          <MindxBrand />
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/apps" className={buttonVariants({ variant: "outline", size: "sm" })}>
+              Danh sách app
+            </Link>
+            <a href={repo.githubUrl} target="_blank" rel="noreferrer" className={buttonVariants({ size: "sm" })}>
+              Mở GitHub
+            </a>
+          </div>
+        </nav>
+
+        <section className="grid min-h-[640px] items-center gap-8 py-6 lg:grid-cols-[1fr_0.95fr]">
+          <div className="space-y-7">
+            <div className="flex flex-wrap gap-2">
+              <Badge className="h-7 rounded-full bg-[#E31F26] px-3 text-white hover:bg-[#c8181f]">
+                Flutter Mobile
+              </Badge>
+              <Badge className="h-7 rounded-full border-[#E31F26]/20 bg-white px-3 text-[#E31F26]">
+                Backend Bridge
+              </Badge>
+              <Badge className="h-7 rounded-full border-amber-200 bg-amber-50 px-3 text-amber-800">
+                LMS Operations
+              </Badge>
+            </div>
+
+            <div className="space-y-5">
+              <p className="inline-flex rounded-full border border-[#E31F26]/15 bg-white px-4 py-2 text-sm font-black uppercase tracking-[0.34em] text-[#E31F26] shadow-xl shadow-red-950/10">
+                LMS Smooth Bridge
+              </p>
+              <h1 className="max-w-4xl text-5xl font-black leading-[0.94] tracking-tight text-[#2C2B2B] sm:text-6xl lg:text-7xl">
+                Mobile app cho dữ liệu LMS nhanh, gọn và dễ vận hành hơn.
+              </h1>
+              <p className="max-w-2xl text-lg font-medium leading-8 text-[#58595B] sm:text-xl">
+                Flutter client kết nối với backend Node.js để lấy dữ liệu LMS, chuẩn hóa payload,
+                cache dashboard và gom các thao tác lớp học vào một flow mobile mượt hơn.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <a
+                href={repo.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-12 items-center gap-2 rounded-full bg-[#E31F26] px-6 text-sm font-black text-white shadow-[0_16px_40px_rgba(227,31,38,0.32)] transition hover:-translate-y-0.5 hover:bg-[#c8181f]"
+              >
+                Xem repository
+                <ArrowRight className="size-4" />
+              </a>
+              <a
+                href="#architecture"
+                className="inline-flex h-12 items-center gap-2 rounded-full border border-[#E31F26]/20 bg-white px-6 text-sm font-black text-[#E31F26] transition hover:-translate-y-0.5 hover:bg-[#fff0e8]"
+              >
+                Kiến trúc hệ thống
+              </a>
+            </div>
+
+            <div className="grid max-w-2xl gap-3 sm:grid-cols-3">
+              {[
+                ["Flutter", "mobile client"],
+                ["Express", "API bridge"],
+                ["MongoDB", "cache & devices"],
+              ].map(([value, label]) => (
+                <div
+                  key={label}
+                  className="rounded-3xl border border-[#E31F26]/10 bg-white/90 p-4 shadow-xl shadow-red-950/5 backdrop-blur"
+                >
+                  <div className="text-2xl font-black text-[#E31F26]">{value}</div>
+                  <div className="mt-1 text-sm font-bold text-[#58595B]">{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="absolute -inset-6 rounded-[3rem] bg-gradient-to-br from-[#E31F26]/25 via-[#ffb288]/30 to-white blur-2xl" />
+            <div className="relative mx-auto max-w-[410px] rounded-[3rem] border border-[#2C2B2B]/10 bg-[#2C2B2B] p-3 shadow-[0_34px_110px_rgba(44,43,43,0.28)]">
+              <div className="overflow-hidden rounded-[2.45rem] bg-[#fffaf7]">
+                <div className="flex items-center justify-between bg-[#E31F26] px-5 py-4 text-white">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.28em] text-white/70">
+                      LMS Mobile
+                    </p>
+                    <p className="mt-1 text-xl font-black">Dashboard hôm nay</p>
+                  </div>
+                  <Gauge className="size-7" />
+                </div>
+
+                <div className="space-y-4 p-5">
+                  <div className="rounded-3xl bg-white p-4 shadow-lg shadow-red-950/5 ring-1 ring-[#E31F26]/10">
+                    <div className="mb-3 flex items-center justify-between">
+                      <p className="text-sm font-black text-[#2C2B2B]">Lớp sắp bắt đầu</p>
+                      <span className="rounded-full bg-[#fff0e8] px-3 py-1 text-xs font-black text-[#E31F26]">
+                        12 phút
+                      </span>
+                    </div>
+                    <div className="grid gap-2">
+                      {["Scratch SB - Buổi 6", "Python PTA - Buổi 11"].map((item, index) => (
+                        <div
+                          key={item}
+                          className="flex items-center justify-between rounded-2xl border border-[#E31F26]/10 bg-[#fffaf7] px-3 py-3"
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="flex size-8 items-center justify-center rounded-full bg-[#E31F26] text-sm font-black text-white">
+                              {index + 1}
+                            </span>
+                            <span className="text-sm font-bold text-[#2C2B2B]">{item}</span>
+                          </div>
+                          <CalendarCheck className="size-4 text-[#E31F26]" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <SmoothMetric label="Reminders" value="08" icon={BellRing} />
+                    <SmoothMetric label="Payroll" value="4.8M" icon={Wallet} />
+                  </div>
+
+                  <div className="rounded-3xl border border-[#E31F26]/10 bg-white p-4 shadow-lg shadow-red-950/5">
+                    <div className="mb-3 flex items-center gap-2 text-sm font-black text-[#E31F26]">
+                      <MessageSquareText className="size-4" />
+                      Comment context
+                    </div>
+                    <p className="text-sm font-medium leading-6 text-[#58595B]">
+                      Lấy comment tuần trước, tạo draft mới và lưu về LMS sau khi review.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {smoothBridgeFeatures.map((feature) => (
+            <Card
+              key={feature.title}
+              className="group border-white/80 bg-white/90 p-2 shadow-xl shadow-red-950/5 backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-red-950/10"
+            >
+              <CardHeader>
+                <div className={`mb-3 flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.accent} text-white shadow-lg`}>
+                  <feature.icon className="size-6" />
+                </div>
+                <CardTitle className="text-xl font-black text-[#2C2B2B]">{feature.title}</CardTitle>
+                <CardDescription className="text-base leading-7 text-[#58595B]">
+                  {feature.description}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </section>
+
+        <section id="architecture" className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
+          <Card className="overflow-hidden border-white/80 bg-white/95 p-3 shadow-xl shadow-red-950/5">
+            <CardHeader>
+              <div className="mb-2 flex size-12 items-center justify-center rounded-2xl bg-[#E31F26] text-white">
+                <Route className="size-6" />
+              </div>
+              <CardTitle className="text-3xl font-black text-[#2C2B2B]">Luồng dữ liệu</CardTitle>
+              <CardDescription className="text-base leading-7">
+                Mobile không gọi LMS trực tiếp. Backend xác thực token, gọi LMS GraphQL, reshape dữ liệu
+                và trả JSON nhẹ hơn cho app.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3">
+                {[
+                  ["Firebase login", "Mobile lấy id_token và lưu session cục bộ."],
+                  ["Backend API", "Express validate token, rate limit và xử lý CORS allowlist."],
+                  ["LMS GraphQL", "Dữ liệu lớp, attendance, payroll và comment được chuẩn hóa trước khi trả về app."],
+                  ["MongoDB", "Cache dashboard, device token, notification history và prewarm jobs."],
+                ].map(([title, description], index) => (
+                  <div
+                    key={title}
+                    className="grid gap-3 rounded-3xl border border-[#E31F26]/10 bg-[#fffaf7] p-4 sm:grid-cols-[auto_1fr]"
+                  >
+                    <div className="flex size-10 items-center justify-center rounded-2xl bg-[#E31F26] text-sm font-black text-white">
+                      {index + 1}
+                    </div>
+                    <div>
+                      <p className="text-lg font-black text-[#2C2B2B]">{title}</p>
+                      <p className="mt-1 text-base leading-7 text-[#58595B]">{description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid gap-6">
+            <Card className="border-[#E31F26]/10 bg-[#2C2B2B] p-3 text-white shadow-xl shadow-slate-950/20">
+              <CardHeader>
+                <div className="mb-2 flex size-12 items-center justify-center rounded-2xl bg-white text-[#E31F26]">
+                  <ChartNoAxesColumnIncreasing className="size-6" />
+                </div>
+                <CardTitle className="text-3xl font-black text-white">API surface</CardTitle>
+                <CardDescription className="text-slate-300">
+                  Các nhóm endpoint chính đang phục vụ mobile và tác vụ vận hành.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-3">
+                {smoothBridgeApiGroups.map((group) => (
+                  <div key={group.title} className="flex gap-3 rounded-2xl bg-white/[0.08] p-3 ring-1 ring-white/10">
+                    <group.icon className="mt-1 size-5 shrink-0 text-red-200" />
+                    <div>
+                      <p className="font-black text-white">{group.title}</p>
+                      <p className="mt-1 text-sm leading-6 text-slate-300">{group.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="border-red-100 bg-gradient-to-br from-red-50 via-white to-amber-50 p-3 shadow-xl shadow-red-950/5">
+              <CardHeader>
+                <div className="mb-2 flex size-12 items-center justify-center rounded-2xl bg-white text-[#E31F26] ring-1 ring-[#E31F26]/10">
+                  <WifiOff className="size-6" />
+                </div>
+                <CardTitle className="text-2xl font-black text-[#2C2B2B]">Stack</CardTitle>
+                <CardDescription className="text-base leading-7">
+                  Cấu trúc repo tách rõ `backend/` và `mobile/`, phù hợp triển khai backend trước rồi trỏ mobile về API.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {smoothBridgeStack.map((item) => (
+                  <span key={item} className="rounded-full bg-white px-3 py-1 text-sm font-black text-[#E31F26] ring-1 ring-[#E31F26]/10">
+                    {item}
+                  </span>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <Card className="border-white/80 bg-white/95 p-3 shadow-xl shadow-red-950/5">
+          <CardHeader>
+            <CardTitle className="text-2xl font-black text-[#2C2B2B]">Thông tin project</CardTitle>
+            <CardDescription className="text-base">
+              Metadata đọc từ Supabase app registry, nội dung landing tham chiếu README và cấu trúc repo.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 md:grid-cols-4">
+            <SmoothInfo label="Tên" value={repo.name} />
+            <SmoothInfo label="Slug" value={repo.slug} />
+            <SmoothInfo label="Nhóm" value={repo.category} />
+            <SmoothInfo label="Cập nhật" value={updatedAt} />
+          </CardContent>
+        </Card>
+      </div>
+    </main>
+  );
+}
+
+function SmoothMetric({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
+  return (
+    <div className="rounded-3xl bg-white p-4 shadow-lg shadow-red-950/5 ring-1 ring-[#E31F26]/10">
+      <div className="mb-3 flex items-center justify-between">
+        <span className="text-xs font-black uppercase tracking-[0.2em] text-[#58595B]">{label}</span>
+        <Icon className="size-4 text-[#E31F26]" />
+      </div>
+      <div className="text-3xl font-black text-[#E31F26]">{value}</div>
+    </div>
+  );
+}
+
+function SmoothInfo({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-3xl border border-[#E31F26]/10 bg-[#fffaf7] p-4">
+      <p className="text-xs font-black uppercase tracking-[0.2em] text-[#E31F26]/70">{label}</p>
+      <p className="mt-2 break-words text-base font-black text-[#2C2B2B]">{value}</p>
+    </div>
   );
 }
 
