@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "MindX Internal Tool Hub",
-  description: "Repository management and dynamic landing pages for internal applications.",
+  description: "Kho quản lý app, repository và landing page nội bộ cho MindX.",
 };
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="vi"
       className={`${beVietnamPro.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full text-[17px] leading-7 flex flex-col">{children}</body>

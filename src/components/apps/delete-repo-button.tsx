@@ -12,7 +12,7 @@ export function DeleteRepoButton({ id, onDeleted }: DeleteRepoButtonProps) {
   const [error, setError] = useState<string | null>(null);
 
   async function handleDelete() {
-    const confirmed = window.confirm("Delete this repository?");
+    const confirmed = window.confirm("Xóa app này khỏi danh sách?");
     if (!confirmed) return;
 
     setDeleting(true);
@@ -25,7 +25,7 @@ export function DeleteRepoButton({ id, onDeleted }: DeleteRepoButtonProps) {
       return;
     }
 
-    setError("Delete failed");
+    setError("Không xóa được");
   }
 
   return (
@@ -34,9 +34,9 @@ export function DeleteRepoButton({ id, onDeleted }: DeleteRepoButtonProps) {
         type="button"
         disabled={deleting}
         onClick={handleDelete}
-        className="h-8 rounded-md bg-red-600 px-3 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+        className="h-9 rounded-full border border-[#E31F26]/20 bg-white px-4 text-sm font-bold text-[#E31F26] transition hover:bg-[#E31F26]/10 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {deleting ? "Deleting..." : "Delete"}
+        {deleting ? "Đang xóa..." : "Xóa"}
       </button>
       {error ? <p className="text-xs text-red-700">{error}</p> : null}
     </div>

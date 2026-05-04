@@ -2,6 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  ArrowUpRight,
+  ExternalLink,
+  GitBranch,
+  LoaderCircle,
+  PackageSearch,
+  Sparkles,
+} from "lucide-react";
 import type { AppRepo } from "@/lib/repo-types";
 import { DeleteRepoButton } from "@/components/apps/delete-repo-button";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +25,15 @@ import {
 
 type RepoResponse = { data: AppRepo[] };
 
+function repoHandle(url: string) {
+  return url.replace(/^https:\/\/github\.com\//, "").replace(/\/$/, "");
+}
+
+function isFeaturedRepo(repo: AppRepo) {
+  const searchable = `${repo.slug} ${repo.name} ${repo.githubUrl}`.toLowerCase();
+  return searchable.includes("mindx-auto-grader") || searchable.includes("auto-grader");
+}
+
 export function ReposGrid() {
   const [repos, setRepos] = useState<AppRepo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +47,7 @@ export function ReposGrid() {
 
       if (!response.ok) {
         if (mounted) {
-          setError("Failed to load repositories.");
+          setError("Không tải được danh sách app. Kiểm tra lại Supabase hoặc API.");
           setLoading(false);
         }
         return;
@@ -52,75 +69,143 @@ export function ReposGrid() {
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-red-100 bg-white p-8 text-base text-slate-600 shadow-sm">
-        Loading repositories...
+      <div className="rounded-[32px] border border-[#E31F26]/10 bg-white p-6 shadow-[0_24px_80px_rgba(44,43,43,0.08)]">
+        <div className="mb-5 flex items-center gap-3 text-sm font-bold text-[#E31F26]">
+          <LoaderCircle className="size-4 animate-spin" />
+          Đang tải danh sách app...
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {[0, 1, 2].map((item) => (
+            <div
+              key={item}
+              className="h-64 animate-pulse rounded-[28px] border border-[#E31F26]/10 bg-gradient-to-br from-[#fff4ef] via-white to-[#ffe9df]"
+            />
+          ))}
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-base text-red-700 shadow-sm">
-        {error}
+      <div className="rounded-[32px] border border-[#E31F26]/20 bg-[#fff4ef] p-8 shadow-[0_24px_80px_rgba(227,31,38,0.12)]">
+        <div className="flex items-start gap-4">
+          <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#E31F26] text-white">
+            !
+          </span>
+          <div>
+            <p className="text-xl font-extrabold text-[#2C2B2B]">Không thể tải dữ liệu</p>
+            <p className="mt-2 max-w-2xl text-base font-medium text-[#58595B]">{error}</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (repos.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-red-300 bg-white p-10 text-center shadow-sm">
-        <p className="text-xl font-bold text-slate-900">No repositories yet</p>
-        <p className="mt-2 text-base text-slate-600">
-          Click <span className="font-semibold text-red-700">Add Repository</span> to create your
-          first app landing page.
+      <div className="rounded-[32px] border border-dashed border-[#E31F26]/30 bg-white p-10 text-center shadow-[0_24px_80px_rgba(44,43,43,0.08)]">
+        <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-[#E31F26]/10 text-[#E31F26]">
+          <PackageSearch className="size-8" />
+        </div>
+        <p className="mt-5 text-2xl font-extrabold text-[#2C2B2B]">Chưa có app nào</p>
+        <p className="mx-auto mt-2 max-w-xl text-base font-medium text-[#58595B]">
+          Bấm <span className="font-extrabold text-[#E31F26]">Thêm app mới</span> để tạo landing
+          page đầu tiên cho repository nội bộ.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-      {repos.map((repo) => (
-        <Card key={repo.id} className="border-red-100/80 bg-white shadow-sm">
-          <CardHeader>
-            <div className="mb-2 flex flex-wrap gap-2">
-              <Badge className="bg-red-600 text-white hover:bg-red-500">{repo.category}</Badge>
-              <Badge variant="outline">{repo.slug}</Badge>
-            </div>
-            <CardTitle className="text-xl">{repo.name}</CardTitle>
-            <CardDescription className="text-base">{repo.shortDescription}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <a
-              href={repo.githubUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="block truncate text-base text-red-700 underline underline-offset-4"
-            >
-              {repo.githubUrl}
-            </a>
-            <div className="flex flex-wrap gap-2">
-              {repo.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-md bg-red-50 px-2 py-1 text-sm font-semibold text-red-700"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          </CardContent>
-          <CardFooter className="flex items-center justify-between gap-2">
-            <Link href={`/apps/${repo.slug}`} className={buttonVariants({ size: "sm" })}>
-              Open Landing
-            </Link>
-            <DeleteRepoButton
-              id={repo.id}
-              onDeleted={() => setRepos((prev) => prev.filter((item) => item.id !== repo.id))}
-            />
-          </CardFooter>
-        </Card>
-      ))}
+    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      {repos.map((repo) => {
+        const featured = isFeaturedRepo(repo);
+        const visibleTags = repo.tags.slice(0, 4);
+        const hiddenTags = Math.max(repo.tags.length - visibleTags.length, 0);
+
+        return (
+          <Card
+            key={repo.id}
+            className={`relative min-h-[360px] rounded-[30px] border bg-white py-0 shadow-[0_24px_70px_rgba(44,43,43,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(227,31,38,0.16)] ${
+              featured ? "border-[#E31F26]/35 ring-4 ring-[#E31F26]/10" : "border-[#E31F26]/10"
+            }`}
+          >
+            <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-[#E31F26] via-[#ff7a45] to-[#ffd3bd]" />
+            <CardHeader className="gap-4 px-6 pt-7">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <Badge className="h-7 rounded-full bg-[#E31F26] px-3 text-sm font-extrabold text-white hover:bg-[#c8181f]">
+                  {repo.category}
+                </Badge>
+                {featured ? (
+                  <Badge className="h-7 rounded-full bg-[#fff0e8] px-3 text-sm font-extrabold text-[#E31F26] hover:bg-[#ffe4d6]">
+                    <Sparkles className="size-3.5" />
+                    Landing mới
+                  </Badge>
+                ) : null}
+              </div>
+              <div>
+                <p className="mb-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-[#E31F26]/70">
+                  /apps/{repo.slug}
+                </p>
+                <CardTitle className="text-2xl font-extrabold leading-tight text-[#2C2B2B]">
+                  {repo.name}
+                </CardTitle>
+              </div>
+              <CardDescription className="line-clamp-3 text-base font-medium leading-7 text-[#58595B]">
+                {repo.shortDescription}
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="flex flex-1 flex-col gap-4 px-6">
+              <a
+                href={repo.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 rounded-2xl border border-[#2C2B2B]/10 bg-[#fff9f5] px-4 py-3 text-sm font-bold text-[#2C2B2B] transition hover:border-[#E31F26]/30 hover:bg-[#fff0e8]"
+              >
+                <GitBranch className="size-4 shrink-0 text-[#E31F26]" />
+                <span className="truncate">{repoHandle(repo.githubUrl)}</span>
+                <ExternalLink className="ml-auto size-4 shrink-0 text-[#58595B]" />
+              </a>
+
+              <div className="flex flex-wrap gap-2">
+                {visibleTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-[#fff0e8] px-3 py-1 text-sm font-bold text-[#E31F26]"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+                {hiddenTags > 0 ? (
+                  <span className="rounded-full bg-[#2C2B2B]/5 px-3 py-1 text-sm font-bold text-[#58595B]">
+                    +{hiddenTags}
+                  </span>
+                ) : null}
+              </div>
+            </CardContent>
+
+            <CardFooter className="mt-auto flex items-center justify-between gap-3 border-t border-[#E31F26]/10 bg-[#fffaf7] p-5">
+              <Link
+                href={`/apps/${repo.slug}`}
+                className={buttonVariants({
+                  size: "lg",
+                  className:
+                    "h-10 rounded-full bg-[#E31F26] px-5 text-sm font-extrabold text-white shadow-[0_12px_30px_rgba(227,31,38,0.28)] hover:bg-[#c8181f]",
+                })}
+              >
+                Mở landing
+                <ArrowUpRight className="size-4" />
+              </Link>
+              <DeleteRepoButton
+                id={repo.id}
+                onDeleted={() => setRepos((prev) => prev.filter((item) => item.id !== repo.id))}
+              />
+            </CardFooter>
+          </Card>
+        );
+      })}
     </div>
   );
 }
