@@ -212,27 +212,34 @@ function AutoGraderLanding({ repo }: { repo: AppRepo }) {
         </nav>
 
         <section className="grid min-h-[620px] items-center gap-8 py-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="space-y-7 text-white">
+          <div className="space-y-7 text-[#7f1d1d]">
             <div className="flex flex-wrap gap-2">
-              <Badge className="h-7 border-white/20 bg-white/15 px-3 text-white backdrop-blur">
+              <Badge className="h-7 border-white/80 bg-white/90 px-3 text-[#b91c1c] shadow-lg shadow-red-950/10 backdrop-blur">
                 Chrome Extension
               </Badge>
-              <Badge className="h-7 border-amber-200/40 bg-amber-300/20 px-3 text-amber-50 backdrop-blur">
+              <Badge className="h-7 border-amber-100 bg-amber-50/95 px-3 text-amber-800 shadow-lg shadow-red-950/10 backdrop-blur">
                 AI Grading Assistant
               </Badge>
-              <Badge className="h-7 border-red-200/40 bg-red-300/20 px-3 text-red-50 backdrop-blur">
+              <Badge className="h-7 border-red-100 bg-red-50/95 px-3 text-[#b91c1c] shadow-lg shadow-red-950/10 backdrop-blur">
                 MindX Internal Tool
               </Badge>
             </div>
 
             <div className="space-y-5">
-              <p className="text-sm font-bold uppercase tracking-[0.42em] text-red-100/90">
+              <p className="inline-flex rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-black uppercase tracking-[0.42em] text-[#b91c1c] shadow-xl shadow-red-950/10 backdrop-blur">
                 MindX Auto Grader Extension
               </p>
-              <h1 className="max-w-4xl text-5xl font-black leading-[0.96] tracking-tight sm:text-6xl lg:text-7xl">
+              <h1
+                className="max-w-4xl text-5xl font-black leading-[0.96] tracking-tight text-[#b91c1c] sm:text-6xl lg:text-7xl"
+                style={{
+                  WebkitTextStroke: "1.35px rgba(255, 255, 255, 0.96)",
+                  textShadow:
+                    "0 3px 0 rgba(255,255,255,0.96), 0 18px 42px rgba(127,29,29,0.26)",
+                }}
+              >
                 Chấm bài nhanh hơn, nhận xét rõ hơn, vận hành gọn hơn.
               </h1>
-              <p className="max-w-2xl text-lg leading-8 text-red-50/85 sm:text-xl">
+              <p className="max-w-2xl rounded-[2rem] border border-white/80 bg-white/85 p-5 text-lg font-semibold leading-8 text-[#7f1d1d] shadow-xl shadow-red-950/10 backdrop-blur sm:text-xl">
                 Một extension Chrome dành cho giáo viên và team vận hành MindX: tự động tick điểm,
                 tạo nhận xét bằng AI, chèn báo cáo Zalo và quản lý trial task trong cùng một workflow.
               </p>
@@ -250,7 +257,7 @@ function AutoGraderLanding({ repo }: { repo: AppRepo }) {
               </a>
               <a
                 href="#setup"
-                className="inline-flex h-12 items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-5 text-sm font-black text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/20"
+                className="inline-flex h-12 items-center gap-2 rounded-2xl border border-white/80 bg-white/85 px-5 text-sm font-black text-[#b91c1c] shadow-xl shadow-red-950/10 backdrop-blur transition hover:-translate-y-0.5 hover:bg-red-50"
               >
                 Xem cách cài đặt
               </a>
@@ -262,9 +269,12 @@ function AutoGraderLanding({ repo }: { repo: AppRepo }) {
                 ["14", "buổi mỗi khóa"],
                 ["1", "flow từ chấm đến submit"],
               ].map(([value, label]) => (
-                <div key={label} className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                  <div className="text-3xl font-black text-white">{value}</div>
-                  <div className="mt-1 text-sm font-semibold text-red-50/75">{label}</div>
+                <div
+                  key={label}
+                  className="rounded-3xl border border-white/80 bg-white/85 p-4 shadow-xl shadow-red-950/10 backdrop-blur"
+                >
+                  <div className="text-3xl font-black text-[#b91c1c]">{value}</div>
+                  <div className="mt-1 text-sm font-bold text-[#7f1d1d]/80">{label}</div>
                 </div>
               ))}
             </div>
