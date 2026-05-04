@@ -14,6 +14,7 @@ function getPool(): Pool {
   if (!globalThis.__repoPool) {
     const useSsl =
       connectionString.includes("supabase.co") ||
+      connectionString.includes("supabase.com") ||
       connectionString.includes("sslmode=require");
 
     globalThis.__repoPool = new Pool({
